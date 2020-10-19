@@ -1,0 +1,15 @@
+<%= form_for @list, :remote => true do |form| %>
+  <div class="modal-header">
+
+  </div>
+  <div class="modal-body">
+    <div class="field">
+      <%= form.text_field :description, class: 'form-control mr-sm-5' %>
+    </div>
+  </div>
+
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+<%= form.submit "Save", class: 'btn btn-primary' %>
+</div>
+<% end %>

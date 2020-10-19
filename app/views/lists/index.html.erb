@@ -1,0 +1,65 @@
+<table class="table table-bordered">
+  <thead class="thead-dark">
+  </thead>
+
+  <tbody data-controller="drag" data-drag-url="/lists/:id/move">
+  <%#= render "lists/navbar" %>
+  <%# if user_signed_in? %>
+  <% @lists.order(position: :asc).each do |list| %>
+    <% if list.user == current_user %>
+      <% if list.completed %>
+        <tr data-id="<%= list.id %>" class="table-secondary">
+          <td>
+            <center>
+              <%= form_for list, remote: true do |f| %>
+                <%= f.text_field :description, type: 'hidden' %>
+                <%= f.check_box :completed, :checked => false, :style => 'visibility: hidden' %>
+                <%= f.button fa_icon("undo"), class: "btn btn-secondary btn-sm" %>
+              <% end %>
+            </center>
+          </td>
+          <td class="striker"><%= link_to list.description %></td>
+          <td>
+            <%= link_to (fa_icon "pencil"), edit_list_path(list), remote: true, class: 'btn btn-outline-warning btn-sm' %>
+            <%= link_to (fa_icon "sort"), list, class: 'btn btn-outline-info btn-sm', method: :delete, data: {confirm: 'Are you sure?'} %>
+            <%= link_to (fa_icon "trash-o"), list, class: 'btn btn-outline-danger btn-sm', remote: true, method: :delete, data: {confirm: 'Are you sure?'} %>
+          </td>
+        </tr>
+      <% else %>
+        <tr data-id="<%= list.id %>">
+          <td>
+            <center>
+              <%= form_for list, remote: true do |f| %>
+                <%= f.text_field :description, type: 'hidden' %>
+                <%= f.check_box :completed, :checked => true, :style => 'visibility: hidden' %>
+                <%= f.button fa_icon("check"), class: "btn btn-success btn-sm" %>
+              <% end %>
+            </center>
+          </td>
+          <td><%= link_to list.description %></td>
+          <td>
+            <%= link_to (fa_icon "pencil"), edit_list_path(list), remote: true, class: 'btn btn-outline-warning btn-sm' %>
+            <%= link_to (fa_icon "sort"), list, class: 'btn btn-outline-info btn-sm', method: :delete, data: {confirm: 'Are you sure?'} %>
+            <%= link_to (fa_icon "trash-o"), list, class: 'btn btn-outline-danger btn-sm', remote: true, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  </tbody>
+</table>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="modal-footer">
+  <%= link_to 'Delete marked items', home_trash_em_path, class: 'btn btn-primary' %>
+  <%= link_to 'Delete All items', home_trash_em_all_path, data: {confirm: 'Are you sure?'} %>
+</div>
